@@ -21,6 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['name'];
     $location = $_POST['location'];
     $price = $_POST['price'];
+    $description = $_POST['description'];
+    $bedrooms = $_POST['bedrooms'];
+    $bathrooms = $_POST['bathrooms'];
+    $furnished = isset($_POST['furnished']) ? 1 : 0;
+    $pets_allowed = isset($_POST['pets_allowed']) ? 1 : 0;
+    $parking = isset($_POST['parking']) ? 1 : 0;
     $available = isset($_POST['available']) ? 1 : 0;
     
     // Validate inputs
@@ -28,12 +34,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "All fields are required";
     } elseif (!is_numeric($price) || $price <= 0) {
         $error_message = "Price must be a positive number";
+    } elseif (!is_numeric($bedrooms) || $bedrooms < 0) {
+        $error_message = "Bedrooms must be a non-negative number";
+    } elseif (!is_numeric($bathrooms) || $bathrooms < 0) {
+        $error_message = "Bathrooms must be a non-negative number";
     } else {
         // Insert apartment
-        $sql = "INSERT INTO apartments (name, location, price, available, owner_id) 
-                VALUES (?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO apartments (name, location, price, description, bedrooms, bathrooms, furnished, pets_allowed, parking, available, owner_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssdii", $name, $location, $price, $available, $user_id);
+        $stmt->bind_param("ssdsiiiiiii", $name, $location, $price, $description, $bedrooms, $bathrooms, $furnished, $pets_allowed, $parking, $available, $user_id);
         
         if ($stmt->execute()) {
             $success_message = "Property added successfully!";
@@ -42,6 +52,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $name = "";
             $location = "";
             $price = "";
+            $description = "";
+            $bedrooms = 1;
+            $bathrooms = 1;
+            $furnished = 0;
+            $pets_allowed = 0;
+            $parking = 0;
             $available = 1;
         } else {
             $error_message = "Error adding property: " . $conn->error;
@@ -349,6 +365,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                            value="<?php echo isset($price) ? htmlspecialchars($price) : ''; ?>" required>
                                 </div>
                                 <div class="form-text">Enter the monthly rent amount in Philippine Peso</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" name="description" rows="3" required><?php echo isset($description) ? htmlspecialchars($description) : ''; ?></textarea>
+                                <div class="form-text">Enter a brief description of your property</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="bedrooms" class="form-label">Bedrooms</label>
+                                <input type="number" min="0" class="form-control" id="bedrooms" name="bedrooms" 
+                                       value="<?php echo isset($bedrooms) ? htmlspecialchars($bedrooms) : '1'; ?>" required>
+                                <div class="form-text">Enter the number of bedrooms</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="bathrooms" class="form-label">Bathrooms</label>
+                                <input type="number" min="0" class="form-control" id="bathrooms" name="bathrooms" 
+                                       value="<?php echo isset($bathrooms) ? htmlspecialchars($bathrooms) : '1'; ?>" required>
+                                <div class="form-text">Enter the number of bathrooms</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="furnished" name="furnished" value="1"
+                                           <?php echo (isset($furnished) && $furnished == 1) ? 'checked' : ''; ?>>
+                                    <label class="form-check-label" for="furnished">Furnished</label>
+                                </div>
+                                <div class="form-text">Toggle if this property is furnished</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="pets_allowed" name="pets_allowed" value="1"
+                                           <?php echo (isset($pets_allowed) && $pets_allowed == 1) ? 'checked' : ''; ?>>
+                                    <label class="form-check-label" for="pets_allowed">Pets Allowed</label>
+                                </div>
+                                <div class="form-text">Toggle if pets are allowed in this property</div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="parking" name="parking" value="1"
+                                           <?php echo (isset($parking) && $parking == 1) ? 'checked' : ''; ?>>
+                                    <label class="form-check-label" for="parking">Parking Available</label>
+                                </div>
+                                <div class="form-text">Toggle if parking is available for this property</div>
                             </div>
                             
                             <div class="mb-4">
