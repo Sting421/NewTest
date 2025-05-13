@@ -1,0 +1,58 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5; /* Light gray background */
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full viewport height */
+    margin: 0;
+}
+
+.container {
+    background-color: #ffffff; /* White background for the form */
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    width: 350px; /* Fixed width for the form */
+}
+
+h2 {
+    text-align: center;
+    color: #333; /* Dark text color */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%; /* Full width inputs */
+    padding: 12px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc; /* Light gray border */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: #1877f2; /* Change border color on focus */
+    outline: none; /* Remove default outline */
+}
+
+input[type="submit"] {
+    background-color: #1877f2; /* Facebook blue */
+    color: white; /* White text color */
+    border: none;
+    padding: 12px;
+    border-radius: 5px;
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 16px;
+}
+
+input[type="submit"]:hover {
+    background-color: #165eab; /* Darker blue on hover */
+}
+
+p {
+    text-align: center;
+}

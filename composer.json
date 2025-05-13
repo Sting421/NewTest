@@ -1,0 +1,9 @@
+{
+  "name": "boarding-house-system",
+  "description": "Boarding House Management System",
+  "type": "project",
+  "require": {
+    "php": "^7.4|^8.0",
+    "ext-mysqli": "*"
+  }
+} 
