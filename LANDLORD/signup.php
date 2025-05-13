@@ -329,7 +329,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container position-relative">
+        <a href="../index.html" class="btn btn-outline-secondary position-absolute top-0 start-0 mt-3">
+            <i class="fas fa-home me-2"></i>Back to Home
+        </a>
+        
         <div class="logo-container">
             <div class="logo">
                 <i class="fas fa-building"></i>

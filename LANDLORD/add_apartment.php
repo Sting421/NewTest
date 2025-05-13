@@ -28,6 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pets_allowed = isset($_POST['pets_allowed']) ? 1 : 0;
     $parking = isset($_POST['parking']) ? 1 : 0;
     $available = isset($_POST['available']) ? 1 : 0;
+    $image_url = null;
+    
+    // Handle image upload if present
+    if(isset($_POST['image_url']) && !empty($_POST['image_url'])) {
+        $image_url = $_POST['image_url'];
+    }
     
     // Validate inputs
     if (empty($name) || empty($location) || empty($price)) {
@@ -40,10 +46,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $error_message = "Bathrooms must be a non-negative number";
     } else {
         // Insert apartment
-        $sql = "INSERT INTO apartments (name, location, price, description, bedrooms, bathrooms, furnished, pets_allowed, parking, available, owner_id) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO apartments (name, location, price, description, image_url, bedrooms, bathrooms, furnished, pets_allowed, parking, available, owner_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("ssdsiiiiiii", $name, $location, $price, $description, $bedrooms, $bathrooms, $furnished, $pets_allowed, $parking, $available, $user_id);
+        $stmt->bind_param("ssdssiiiiiii", $name, $location, $price, $description, $image_url, $bedrooms, $bathrooms, $furnished, $pets_allowed, $parking, $available, $user_id);
         
         if ($stmt->execute()) {
             $success_message = "Property added successfully!";
@@ -53,6 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $location = "";
             $price = "";
             $description = "";
+            $image_url = "";
             $bedrooms = 1;
             $bathrooms = 1;
             $furnished = 0;
@@ -77,6 +84,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Cloudinary Upload Widget -->
+    <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
     <style>
         :root {
             --primary-color: #4361ee;
@@ -260,6 +269,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background-color: rgba(239, 71, 111, 0.05);
             color: var(--danger-color);
         }
+        
+        /* Image upload styles */
+        .image-preview {
+            width: 100%;
+            height: 200px;
+            border: 1px dashed #ddd;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-preview.has-image .upload-prompt {
+            display: none;
+        }
+        
+        .upload-prompt {
+            text-align: center;
+            color: #6c757d;
+        }
+        
+        .upload-btn {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -423,6 +465,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <div class="form-text">Toggle if this property is currently available for rent</div>
                             </div>
                             
+                            <!-- Image Upload Section -->
+                            <div class="mb-3">
+                                <label class="form-label">Property Image</label>
+                                <div class="image-preview" id="imagePreview">
+                                    <div class="upload-prompt">
+                                        <i class="fas fa-cloud-upload-alt fa-3x mb-2"></i>
+                                        <p>Click below to upload an image</p>
+                                    </div>
+                                    <img id="previewImg" src="" style="display: none;">
+                                </div>
+                                <button type="button" id="upload_widget" class="btn btn-outline-primary upload-btn">
+                                    <i class="fas fa-cloud-upload-alt me-2"></i>Upload Image
+                                </button>
+                                <input type="hidden" id="image_url" name="image_url">
+                            </div>
+                            
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                                 <a href="manage_apartments.php" class="btn btn-outline-secondary">Cancel</a>
                                 <button type="submit" class="btn btn-primary">
@@ -437,5 +495,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Cloudinary Upload Widget Configuration
+        var myWidget = cloudinary.createUploadWidget({
+            cloudName: 'dap8wtx5z', 
+            uploadPreset: 'ml_default', // Custom unsigned upload preset
+            maxFiles: 1,
+            sources: ['local', 'url', 'camera'],
+            showAdvancedOptions: false,
+            cropping: true,
+            multiple: false,
+            defaultSource: 'local',
+            styles: {
+                palette: {
+                    window: '#FFFFFF',
+                    windowBorder: '#90A0B3',
+                    tabIcon: '#4361EE',
+                    menuIcons: '#5A616A',
+                    textDark: '#000000',
+                    textLight: '#FFFFFF',
+                    link: '#4361EE',
+                    action: '#4361EE',
+                    inactiveTabIcon: '#777',
+                    error: '#F44235',
+                    inProgress: '#4361EE',
+                    complete: '#06D6A0',
+                    sourceBg: '#F5F7FA'
+                }
+            }
+        }, (error, result) => {
+            if (!error && result && result.event === "success") {
+                // Update the hidden input with the URL
+                document.getElementById('image_url').value = result.info.secure_url;
+                
+                // Display the image preview
+                const previewImg = document.getElementById('previewImg');
+                previewImg.src = result.info.secure_url;
+                previewImg.style.display = 'block';
+                
+                // Add class to image preview container
+                document.getElementById('imagePreview').classList.add('has-image');
+                
+                console.log('Upload successful:', result.info.secure_url);
+            }
+        });
+        
+        // Add click event to upload button
+        document.getElementById('upload_widget').addEventListener('click', function() {
+            myWidget.open();
+        }, false);
+    </script>
 </body>
 </html> 

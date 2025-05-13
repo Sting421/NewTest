@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 13, 2025 at 01:45 PM
+-- Generation Time: May 13, 2025 at 03:24 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -324,6 +324,7 @@ CREATE TABLE `admin_apartments_view` (
 ,`price` decimal(10,2)
 ,`available` tinyint(1)
 ,`description` text
+,`image_url` varchar(255)
 ,`bedrooms` int(11)
 ,`bathrooms` int(11)
 ,`furnished` tinyint(1)
@@ -407,19 +408,21 @@ CREATE TABLE `apartments` (
   `parking` tinyint(1) DEFAULT 0,
   `internet` tinyint(1) DEFAULT 0,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp()
+  `updated_at` timestamp NULL DEFAULT NULL ON UPDATE current_timestamp(),
+  `image_url` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `apartments`
 --
 
-INSERT INTO `apartments` (`id`, `name`, `location`, `price`, `available`, `owner_id`, `tenant_id`, `description`, `bedrooms`, `bathrooms`, `furnished`, `pets_allowed`, `parking`, `internet`, `created_at`, `updated_at`) VALUES
-(1, 'Sunset Apartments', 'Los Angeles', 2500.00, 0, 5, 6, 'Beautiful sunset view apartments', 2, 1, 1, 0, 1, 1, '2024-12-08 00:00:00', '2025-05-13 09:54:07'),
-(2, 'Ocean View Residences', 'Miami', 3000.00, 0, 5, NULL, 'Luxury apartments with ocean view', 3, 2, 1, 1, 1, 1, '2024-12-08 00:15:00', '2025-05-13 09:55:53'),
-(3, 'Mountain Retreat', 'Denver', 1800.00, 0, 5, 6, 'Cozy apartments near the mountains', 1, 1, 0, 1, 0, 1, '2024-12-08 00:30:00', '2025-05-13 09:58:25'),
-(4, 'City Center Loft', 'New York', 3500.00, 1, 5, NULL, 'Modern lofts in the heart of the city', 2, 2, 1, 0, 0, 1, '2024-12-08 00:45:00', '2025-05-13 09:57:25'),
-(5, 'Lakeside Villas', 'Chicago', 32100.00, 1, 5, 3, 'Luxurious villas by the lake', 4, 3, 1, 1, 1, 1, '2024-12-08 01:00:00', '2025-05-13 09:57:22');
+INSERT INTO `apartments` (`id`, `name`, `location`, `price`, `available`, `owner_id`, `tenant_id`, `description`, `bedrooms`, `bathrooms`, `furnished`, `pets_allowed`, `parking`, `internet`, `created_at`, `updated_at`, `image_url`) VALUES
+(1, 'Sunset Apartments', 'Los Angeles', 2500.00, 0, 5, 6, 'Beautiful sunset view apartments', 2, 1, 1, 0, 1, 1, '2024-12-08 00:00:00', '2025-05-13 09:54:07', NULL),
+(2, 'Ocean View Residences', 'Miami', 3000.00, 0, 5, NULL, 'Luxury apartments with ocean view', 3, 2, 1, 1, 1, 1, '2024-12-08 00:15:00', '2025-05-13 09:55:53', NULL),
+(3, 'Mountain Retreat', 'Denver', 1800.00, 0, 5, 6, 'Cozy apartments near the mountains', 1, 1, 0, 1, 0, 1, '2024-12-08 00:30:00', '2025-05-13 09:58:25', NULL),
+(4, 'City Center Loft', 'New York', 3500.00, 1, 5, NULL, 'Modern lofts in the heart of the city', 2, 2, 1, 0, 0, 1, '2024-12-08 00:45:00', '2025-05-13 13:20:57', 'https://res.cloudinary.com/dap8wtx5z/image/upload/v1747142467/istockphoto-492965853-612x612_hpe3qu.jpg'),
+(5, 'Lakeside Villas', 'Chicago', 32100.00, 1, 5, 3, 'Luxurious villas by the lake', 4, 3, 1, 1, 1, 1, '2024-12-08 01:00:00', '2025-05-13 09:57:22', NULL),
+(6, 'Testing', 'teafdsafa', 2000.00, 1, 7, NULL, 'fdasfasfasdfa', 1, 1, 0, 1, 0, 0, '2025-05-13 13:08:11', '2025-05-13 13:14:33', 'https://res.cloudinary.com/dap8wtx5z/image/upload/v1747142082/istockphoto-492965853-612x612_otbllb.jpg');
 
 -- --------------------------------------------------------
 
@@ -432,6 +435,7 @@ CREATE TABLE `landlord_apartments_view` (
 ,`name` varchar(255)
 ,`location` varchar(255)
 ,`description` text
+,`image_url` varchar(255)
 ,`price` decimal(10,2)
 ,`available` tinyint(1)
 ,`bedrooms` int(11)
@@ -503,7 +507,8 @@ INSERT INTO `reservations` (`id`, `user_id`, `apartment_id`, `reservation_date`,
 (10, 3, 1, '2024-12-08 07:03:00', 15, 'reserved', '2025-01-15', '2026-04-15', NULL),
 (11, 6, 1, '2025-05-13 09:52:00', 30, 'accepted', NULL, NULL, '2025-05-13 09:53:03'),
 (12, 6, 2, '2025-05-20 09:55:00', 90, 'accepted', NULL, NULL, '2025-05-13 09:55:53'),
-(13, 6, 3, '2025-05-14 09:57:00', 60, 'accepted', NULL, NULL, '2025-05-13 09:58:25');
+(13, 6, 3, '2025-05-14 09:57:00', 60, 'accepted', NULL, NULL, '2025-05-13 09:58:25'),
+(14, 6, 4, '2025-05-14 11:51:00', 60, 'reserved', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -537,7 +542,7 @@ INSERT INTO `users` (`id`, `name`, `lastname`, `email`, `password`, `role`, `pho
 --
 DROP TABLE IF EXISTS `admin_apartments_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `admin_apartments_view`  AS SELECT `a`.`id` AS `id`, `a`.`name` AS `name`, `a`.`location` AS `location`, `a`.`price` AS `price`, `a`.`available` AS `available`, `a`.`description` AS `description`, `a`.`bedrooms` AS `bedrooms`, `a`.`bathrooms` AS `bathrooms`, `a`.`furnished` AS `furnished`, `a`.`pets_allowed` AS `pets_allowed`, `a`.`parking` AS `parking`, `a`.`internet` AS `internet`, `a`.`created_at` AS `created_at`, `u`.`name` AS `owner_name`, `u`.`lastname` AS `owner_lastname`, `u`.`email` AS `owner_email`, `t`.`name` AS `tenant_name`, `t`.`lastname` AS `tenant_lastname`, `t`.`email` AS `tenant_email`, count(distinct `r`.`id`) AS `reservation_count` FROM (((`apartments` `a` left join `users` `u` on(`a`.`owner_id` = `u`.`id`)) left join `users` `t` on(`a`.`tenant_id` = `t`.`id`)) left join `reservations` `r` on(`a`.`id` = `r`.`apartment_id`)) GROUP BY `a`.`id` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `admin_apartments_view`  AS SELECT `a`.`id` AS `id`, `a`.`name` AS `name`, `a`.`location` AS `location`, `a`.`price` AS `price`, `a`.`available` AS `available`, `a`.`description` AS `description`, `a`.`image_url` AS `image_url`, `a`.`bedrooms` AS `bedrooms`, `a`.`bathrooms` AS `bathrooms`, `a`.`furnished` AS `furnished`, `a`.`pets_allowed` AS `pets_allowed`, `a`.`parking` AS `parking`, `a`.`internet` AS `internet`, `a`.`created_at` AS `created_at`, `u`.`name` AS `owner_name`, `u`.`lastname` AS `owner_lastname`, `u`.`email` AS `owner_email`, `t`.`name` AS `tenant_name`, `t`.`lastname` AS `tenant_lastname`, `t`.`email` AS `tenant_email`, count(distinct `r`.`id`) AS `reservation_count` FROM (((`apartments` `a` left join `users` `u` on(`a`.`owner_id` = `u`.`id`)) left join `users` `t` on(`a`.`tenant_id` = `t`.`id`)) left join `reservations` `r` on(`a`.`id` = `r`.`apartment_id`)) GROUP BY `a`.`id` ;
 
 -- --------------------------------------------------------
 
@@ -564,7 +569,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `landlord_apartments_view`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `landlord_apartments_view`  AS SELECT `a`.`id` AS `id`, `a`.`name` AS `name`, `a`.`location` AS `location`, `a`.`description` AS `description`, `a`.`price` AS `price`, `a`.`available` AS `available`, `a`.`bedrooms` AS `bedrooms`, `a`.`bathrooms` AS `bathrooms`, `a`.`furnished` AS `furnished`, `a`.`pets_allowed` AS `pets_allowed`, `a`.`parking` AS `parking`, `a`.`internet` AS `internet`, `a`.`created_at` AS `created_at`, `a`.`updated_at` AS `updated_at`, `t`.`id` AS `tenant_id`, `t`.`name` AS `tenant_name`, `t`.`lastname` AS `tenant_lastname`, `t`.`email` AS `tenant_email`, `t`.`phone` AS `tenant_phone`, count(distinct `r`.`id`) AS `reservation_count`, sum(case when `r`.`status` = 'reserved' or `r`.`status` = 'accepted' then 1 else 0 end) AS `active_reservations` FROM ((`apartments` `a` left join `users` `t` on(`a`.`tenant_id` = `t`.`id`)) left join `reservations` `r` on(`a`.`id` = `r`.`apartment_id`)) WHERE `a`.`owner_id` is not null GROUP BY `a`.`id` ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `landlord_apartments_view`  AS SELECT `a`.`id` AS `id`, `a`.`name` AS `name`, `a`.`location` AS `location`, `a`.`description` AS `description`, `a`.`image_url` AS `image_url`, `a`.`price` AS `price`, `a`.`available` AS `available`, `a`.`bedrooms` AS `bedrooms`, `a`.`bathrooms` AS `bathrooms`, `a`.`furnished` AS `furnished`, `a`.`pets_allowed` AS `pets_allowed`, `a`.`parking` AS `parking`, `a`.`internet` AS `internet`, `a`.`created_at` AS `created_at`, `a`.`updated_at` AS `updated_at`, `t`.`id` AS `tenant_id`, `t`.`name` AS `tenant_name`, `t`.`lastname` AS `tenant_lastname`, `t`.`email` AS `tenant_email`, `t`.`phone` AS `tenant_phone`, count(distinct `r`.`id`) AS `reservation_count`, sum(case when `r`.`status` = 'reserved' or `r`.`status` = 'accepted' then 1 else 0 end) AS `active_reservations` FROM ((`apartments` `a` left join `users` `t` on(`a`.`tenant_id` = `t`.`id`)) left join `reservations` `r` on(`a`.`id` = `r`.`apartment_id`)) WHERE `a`.`owner_id` is not null GROUP BY `a`.`id` ;
 
 -- --------------------------------------------------------
 
@@ -622,13 +627,13 @@ ALTER TABLE `admins`
 -- AUTO_INCREMENT for table `apartments`
 --
 ALTER TABLE `apartments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `reservations`
 --
 ALTER TABLE `reservations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `users`

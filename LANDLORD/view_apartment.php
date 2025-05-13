@@ -316,116 +316,105 @@ $reservations_result = $reservations_stmt->get_result();
     </nav>
 
     <!-- Main Content -->
-    <div class="container mt-4">
-        <!-- Page Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h2><?php echo htmlspecialchars($apartment['name']); ?></h2>
-                <p class="text-muted"><i class="fas fa-map-marker-alt me-2"></i><?php echo htmlspecialchars($apartment['location']); ?></p>
-            </div>
-            <div>
-                <a href="manage_apartments.php" class="btn btn-outline-secondary me-2">
-                    <i class="fas fa-arrow-left me-1"></i>Back to Properties
-                </a>
-                <a href="edit_apartment.php?id=<?php echo $apartment['id']; ?>" class="btn btn-primary">
-                    <i class="fas fa-edit me-1"></i>Edit Property
-                </a>
+    <div class="container py-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="d-flex align-items-center justify-content-between">
+                    <h2 class="mb-0"><?php echo htmlspecialchars($apartment['name']); ?></h2>
+                    <div>
+                        <a href="edit_apartment.php?id=<?php echo $apartment_id; ?>" class="btn btn-primary me-2">
+                            <i class="fas fa-edit me-1"></i>Edit Property
+                        </a>
+                        <a href="manage_apartments.php" class="btn btn-outline-secondary">
+                            <i class="fas fa-chevron-left me-1"></i>Back to Properties
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
         
-        <!-- Property Details -->
         <div class="row">
-            <div class="col-md-8">
-                <div class="property-header">
-                    <span class="badge property-badge <?php echo $apartment['available'] ? 'bg-success' : 'bg-danger'; ?>">
-                        <?php echo $apartment['available'] ? 'Available' : 'Occupied'; ?>
-                    </span>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4>Property Details</h4>
-                            <div class="property-price mb-3">₱<?php echo number_format($apartment['price'], 2); ?>/month</div>
-                            <p><?php echo nl2br(htmlspecialchars($apartment['description'])); ?></p>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="detail-item">
-                                <div class="detail-icon">
-                                    <i class="fas fa-bed"></i>
-                                </div>
-                                <div class="detail-content">
-                                    <div class="detail-label">Bedrooms</div>
-                                    <div class="detail-value"><?php echo htmlspecialchars($apartment['bedrooms']); ?></div>
-                                </div>
+            <div class="col-lg-8">
+                <!-- Property Header with Image -->
+                <div class="card mb-4">
+                    <?php if (!empty($apartment['image_url'])): ?>
+                    <div class="property-image">
+                        <img src="<?php echo htmlspecialchars($apartment['image_url']); ?>" alt="<?php echo htmlspecialchars($apartment['name']); ?>" class="img-fluid w-100" style="max-height: 400px; object-fit: cover;">
+                    </div>
+                    <?php endif; ?>
+                    <div class="card-body property-header">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <h4 class="mb-0"><?php echo htmlspecialchars($apartment['name']); ?></h4>
+                                <p class="text-muted mb-0"><i class="fas fa-map-marker-alt me-2"></i><?php echo htmlspecialchars($apartment['location']); ?></p>
                             </div>
-                            <div class="detail-item">
-                                <div class="detail-icon">
-                                    <i class="fas fa-bath"></i>
-                                </div>
-                                <div class="detail-content">
-                                    <div class="detail-label">Bathrooms</div>
-                                    <div class="detail-value"><?php echo htmlspecialchars($apartment['bathrooms']); ?></div>
-                                </div>
-                            </div>
-                            
-                            <div class="detail-item">
-                                <div class="detail-icon">
-                                    <i class="fas fa-calendar-plus"></i>
-                                </div>
-                                <div class="detail-content">
-                                    <div class="detail-label">Added</div>
-                                    <div class="detail-value"><?php echo date('F j, Y', strtotime($apartment['created_at'])); ?></div>
-                                </div>
+                            <div class="property-price text-end">
+                                $<?php echo number_format($apartment['price'], 2); ?><span class="text-muted fs-6">/month</span>
                             </div>
                         </div>
+                        
+                        <?php if ($apartment['available']): ?>
+                            <span class="badge bg-success property-badge">Available</span>
+                        <?php else: ?>
+                            <span class="badge bg-danger property-badge">Not Available</span>
+                        <?php endif; ?>
                     </div>
                 </div>
                 
-                <div class="property-detail-section">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5>Additional Information</h5>
-                        </div>
-                        <div class="card-body">
-                            <p><?php echo nl2br(htmlspecialchars($apartment['description'])); ?></p>
-                            
-                            <div class="row mt-4">
-                                <div class="col-md-6">
-                                    <div class="detail-item">
-                                        <div class="detail-icon">
-                                            <i class="fas fa-couch"></i>
-                                        </div>
-                                        <div class="detail-content">
-                                            <div class="detail-label">Furnished</div>
-                                            <div class="detail-value"><?php echo $apartment['furnished'] ? 'Yes' : 'No'; ?></div>
-                                        </div>
-                                    </div>
-                                    <div class="detail-item">
-                                        <div class="detail-icon">
-                                            <i class="fas fa-paw"></i>
-                                        </div>
-                                        <div class="detail-content">
-                                            <div class="detail-label">Pets Allowed</div>
-                                            <div class="detail-value"><?php echo $apartment['pets_allowed'] ? 'Yes' : 'No'; ?></div>
-                                        </div>
+                <!-- Property Details -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">Property Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <?php if (!empty($apartment['description'])): ?>
+                            <div class="mb-4">
+                                <h6 class="fw-bold mb-3">Description</h6>
+                                <p><?php echo nl2br(htmlspecialchars($apartment['description'])); ?></p>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <h6 class="fw-bold mb-3">Features</h6>
+                                <div class="detail-item">
+                                    <div class="detail-icon"><i class="fas fa-bed"></i></div>
+                                    <div class="detail-content">
+                                        <strong>Bedrooms:</strong> <?php echo $apartment['bedrooms']; ?>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="detail-item">
-                                        <div class="detail-icon">
-                                            <i class="fas fa-parking"></i>
-                                        </div>
-                                        <div class="detail-content">
-                                            <div class="detail-label">Parking Available</div>
-                                            <div class="detail-value"><?php echo $apartment['parking'] ? 'Yes' : 'No'; ?></div>
-                                        </div>
+                                <div class="detail-item">
+                                    <div class="detail-icon"><i class="fas fa-bath"></i></div>
+                                    <div class="detail-content">
+                                        <strong>Bathrooms:</strong> <?php echo $apartment['bathrooms']; ?>
                                     </div>
-                                    <div class="detail-item">
-                                        <div class="detail-icon">
-                                            <i class="fas fa-wifi"></i>
-                                        </div>
-                                        <div class="detail-content">
-                                            <div class="detail-label">Internet Included</div>
-                                            <div class="detail-value"><?php echo $apartment['internet'] ? 'Yes' : 'No'; ?></div>
-                                        </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-icon"><i class="fas fa-couch"></i></div>
+                                    <div class="detail-content">
+                                        <strong>Furnished:</strong> <?php echo $apartment['furnished'] ? 'Yes' : 'No'; ?>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <h6 class="fw-bold mb-3">Amenities</h6>
+                                <div class="detail-item">
+                                    <div class="detail-icon"><i class="fas fa-paw"></i></div>
+                                    <div class="detail-content">
+                                        <strong>Pets Allowed:</strong> <?php echo $apartment['pets_allowed'] ? 'Yes' : 'No'; ?>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-icon"><i class="fas fa-car"></i></div>
+                                    <div class="detail-content">
+                                        <strong>Parking:</strong> <?php echo $apartment['parking'] ? 'Yes' : 'No'; ?>
+                                    </div>
+                                </div>
+                                <div class="detail-item">
+                                    <div class="detail-icon"><i class="fas fa-wifi"></i></div>
+                                    <div class="detail-content">
+                                        <strong>Internet:</strong> <?php echo $apartment['internet'] ? 'Yes' : 'No'; ?>
                                     </div>
                                 </div>
                             </div>
@@ -434,7 +423,7 @@ $reservations_result = $reservations_stmt->get_result();
                 </div>
             </div>
             
-            <div class="col-md-4">
+            <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Current Reservations</h5>

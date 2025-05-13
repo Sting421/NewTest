@@ -924,9 +924,13 @@ $reservations_result = $stmt->get_result();
                             <div class="col-lg-4 col-md-6 mb-0">
                                 <div class="apartment-card card h-100">
                                     <div class="card-img-top">
-                                        <div class="card-img-icon">
-                                            <i class="fas fa-building"></i>
-                                        </div>
+                                        <?php if (!empty($room['image_url'])): ?>
+                                            <img src="<?php echo htmlspecialchars($room['image_url']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($room['name']); ?>" style="height: 180px; object-fit: cover;">
+                                        <?php else: ?>
+                                            <div class="card-img-icon">
+                                                <i class="fas fa-building"></i>
+                                            </div>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="card-body d-flex flex-column">
                                         <h5 class="card-title"><?php echo htmlspecialchars($room['name']); ?></h5>
@@ -977,7 +981,11 @@ $reservations_result = $stmt->get_result();
                                             <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="apartment-detail-image mb-4">
-                                                        <i class="fas fa-building"></i>
+                                                        <?php if (!empty($room['image_url'])): ?>
+                                                            <img src="<?php echo htmlspecialchars($room['image_url']); ?>" class="w-100 h-100" style="object-fit: cover;" alt="<?php echo htmlspecialchars($room['name']); ?>">
+                                                        <?php else: ?>
+                                                            <i class="fas fa-building"></i>
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">

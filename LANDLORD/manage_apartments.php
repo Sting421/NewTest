@@ -452,7 +452,13 @@ if (isset($_GET['error'])) {
                     <div class="col-lg-4 col-md-6 mb-4">
                         <div class="card property-card h-100" onclick="window.location.href='view_apartment.php?id=<?php echo $apartment['id']; ?>'" style="cursor: pointer;">
                             <div class="position-relative">
-                               
+                                <?php if (!empty($apartment['image_url'])): ?>
+                                    <img src="<?php echo htmlspecialchars($apartment['image_url']); ?>" class="card-img-top" alt="<?php echo htmlspecialchars($apartment['name']); ?>" style="height: 180px; object-fit: cover;">
+                                <?php else: ?>
+                                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 180px;">
+                                        <i class="fas fa-home fa-3x text-secondary"></i>
+                                    </div>
+                                <?php endif; ?>
                                 <span class="badge property-badge <?php echo $apartment['available'] ? 'bg-success' : 'bg-danger'; ?>">
                                     <?php echo $apartment['available'] ? 'Available' : 'Occupied'; ?>
                                 </span>

@@ -610,7 +610,7 @@ if (isset($_GET['error'])) {
                         <?php if ($apartments_result->num_rows > 0): ?>
                             <div class="list-group">
                                 <?php while($apartment = $apartments_result->fetch_assoc()): ?>
-                                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                                    <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-center p-3">
                                         <div>
                                             <h6 class="mb-1"><?php echo htmlspecialchars($apartment['name']); ?></h6>
                                             <p class="text-muted mb-0">
